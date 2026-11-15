@@ -1,0 +1,150 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ConfigDumpInfo xmlns="http://v8.1c.ru/8.3/xcf/dumpinfo" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" format="Hierarchical" version="2.21">
+	<ConfigVersions>
+		<Metadata name="Catalog.ВебАккаунты" id="04c65bd3-a7d3-590f-ad7f-ae4a36a0dccd" configVersion="f55f3c295b5d4e40b7a27c417d17437e00000000">
+			<Metadata name="Catalog.ВебАккаунты.Attribute.Активен" id="2a6ec55b-9553-5081-a1eb-eb95f8fbb4de"/>
+			<Metadata name="Catalog.ВебАккаунты.Attribute.Роль" id="37821887-0a79-5223-b757-faaf0804257b"/>
+			<Metadata name="Catalog.ВебАккаунты.Attribute.Читатель" id="42f9c7d5-1dd5-5359-832e-a49a6d662c4e"/>
+			<Metadata name="Catalog.ВебАккаунты.Attribute.ХешПароля" id="c3470f67-717d-596f-acfd-209747de8022"/>
+		</Metadata>
+		<Metadata name="Catalog.ИсточникиПоступления" id="f2174cf5-8d63-5280-b861-7d89e97ac2d2" configVersion="6e156d6235523c4ab115875dec457add00000000"/>
+		<Metadata name="Catalog.ПричиныСписания" id="973bca1b-ce29-5c88-8651-3805b4f37a85" configVersion="f0518dee3555ef46a03f9d5d4b37d5b500000000"/>
+		<Metadata name="Catalog.Читатели" id="c4a402ea-bdfa-56c3-80d7-099a2ebfed13" configVersion="0f7c487b7fe0f34e89c85a705078871400000000">
+			<Metadata name="Catalog.Читатели.Attribute.ЭлектроннаяПочта" id="87528b30-f46b-56cb-8395-de51f810923b"/>
+			<Metadata name="Catalog.Читатели.Attribute.Группа" id="dafaccc0-8ae9-5ea3-b4ed-1c39ec7c3ff4"/>
+		</Metadata>
+		<Metadata name="Catalog.Читатели.ObjectModule" id="c4a402ea-bdfa-56c3-80d7-099a2ebfed13.0" configVersion="a0e1646afc9253438a6ba226d2e524d800000000"/>
+		<Metadata name="Catalog.Экземпляры" id="2235198e-1336-5d51-ad98-539edc96192e" configVersion="f446d5026fe86dab0f0072611c19737d00000000">
+			<Metadata name="Catalog.Экземпляры.Attribute.Аннотация" id="32526dfc-2912-47b1-b7b7-c3d4148a3a2b"/>
+			<Metadata name="Catalog.Экземпляры.Attribute.Раздел" id="d9fa452c-251f-4ba5-8437-03846de8ff05"/>
+			<Metadata name="Catalog.Экземпляры.Attribute.Издательство" id="8507caa3-857e-490d-a82f-5605a403e63e"/>
+			<Metadata name="Catalog.Экземпляры.Attribute.ISBN" id="05d64ef0-e1cb-4846-b05c-54bb9a4c31b3"/>
+			<Metadata name="Catalog.Экземпляры.Attribute.Обложка" id="b7505141-c27a-43fa-ae58-b3a075aece55"/>
+			<Metadata name="Catalog.Экземпляры.Attribute.Страниц" id="0710e2b4-cf81-4132-b7f6-205eb96d57f1"/>
+			<Metadata name="Catalog.Экземпляры.Attribute.Стоимость" id="30c6cd85-34f0-565d-8064-8c610371e0e4"/>
+			<Metadata name="Catalog.Экземпляры.Attribute.Автор" id="539920c7-0de0-52bf-b3d3-7368a408c1f6"/>
+			<Metadata name="Catalog.Экземпляры.Attribute.УДК" id="9fef2b49-0f3c-5345-a1de-57302657f5ef"/>
+			<Metadata name="Catalog.Экземпляры.Attribute.ДатаПоступления" id="af5ca4fd-60b4-5e63-bbf0-23f429b53c42"/>
+			<Metadata name="Catalog.Экземпляры.Attribute.ГодИздания" id="b0a69e70-6bf8-52a3-8640-b463926aaa7f"/>
+			<Metadata name="Catalog.Экземпляры.Attribute.Состояние" id="c8926a08-4c71-59d1-be17-662a855498ab"/>
+			<Metadata name="Catalog.Экземпляры.Attribute.Источник" id="ee7ebdf4-99ac-5577-9dfb-693dc00445e4"/>
+		</Metadata>
+		<Metadata name="Catalog.Экземпляры.ObjectModule" id="2235198e-1336-5d51-ad98-539edc96192e.0" configVersion="0db05402791aff4eb39f3071129a06eb00000000"/>
+		<Metadata name="CommonModule.БиблиусДанные" id="9edc8296-2aae-51af-904d-e49834435e5d" configVersion="354f282f6c466f43916cd947ca78ba9300000000"/>
+		<Metadata name="CommonModule.БиблиусДанные.Module" id="9edc8296-2aae-51af-904d-e49834435e5d.0" configVersion="eff2bcfbf846f34b8cb580d37440a2d300000000"/>
+		<Metadata name="CommonModule.БиблиусУчет" id="4d416f39-f1a9-543b-a339-9aab7ef6b2a2" configVersion="7107b41f1ecb764ba638d443a9a0920300000000"/>
+		<Metadata name="CommonModule.БиблиусУчет.Module" id="4d416f39-f1a9-543b-a339-9aab7ef6b2a2.0" configVersion="8a3071f18801e54bbe6ebc2a8be4f78e00000000"/>
+		<Metadata name="Configuration.Конфигурация" id="55167cd4-18bb-4326-88e3-8ceebcacfe20" configVersion="5a8777fdb74d0f48a55b1549ab34a7db00000000"/>
+		<Metadata name="Configuration.Конфигурация.ManagedApplicationModule" id="e9e4df97-95ba-4f5e-99ec-0cb066101cd8.6" configVersion="7934a0415e014e449307e060cee1401900000000"/>
+		<Metadata name="Constant.КлючОбмена" id="a3435c7e-7b20-5cf3-9dde-4407a51c3ce4" configVersion="39576bd45d340f4395267e385e773f9100000000"/>
+		<Metadata name="Document.Выдача" id="999e4218-e72a-50c0-b390-87e3d106f6f3" configVersion="83f5e63d2d047547aebbba64d3daf13800000000">
+			<Metadata name="Document.Выдача.Attribute.ВнешнийКод" id="0db5aba8-6fc3-592f-8722-9f032beac4f2"/>
+			<Metadata name="Document.Выдача.Attribute.Экземпляр" id="2999f12b-f63e-5b5c-ad5a-eabd5abbd314"/>
+			<Metadata name="Document.Выдача.Attribute.Читатель" id="312ee990-b1b7-5a22-b735-554ee4401cf3"/>
+			<Metadata name="Document.Выдача.Attribute.Состояние" id="45a68756-5ac4-5c79-ba99-39399c1f53e0"/>
+			<Metadata name="Document.Выдача.Attribute.ДатаУтери" id="657cf864-adb0-5663-ad70-675eace871b2"/>
+			<Metadata name="Document.Выдача.Attribute.ФактическийВозврат" id="6a3fce92-7767-5992-aa4f-0a1cca5e405f"/>
+			<Metadata name="Document.Выдача.Attribute.ПлановыйВозврат" id="78234037-1ab7-5c60-a77d-9bc97514ca38"/>
+			<Metadata name="Document.Выдача.Attribute.ДатаВыдачи" id="a099d099-5b64-51ae-8734-2ef18387258e"/>
+		</Metadata>
+		<Metadata name="Document.Выдача.ObjectModule" id="999e4218-e72a-50c0-b390-87e3d106f6f3.0" configVersion="e380a8db90a7c74bbd0f7c2290bf5ffd00000000"/>
+		<Metadata name="Document.Поступление" id="ddc6026c-1994-5a7b-a00a-5f8ac3677350" configVersion="67f8cf9c349e394c80ae593bc9f12f3900000000">
+			<Metadata name="Document.Поступление.Attribute.ВнешнийКод" id="081b1ac4-27b5-5079-8111-39cdf275dc1d"/>
+			<Metadata name="Document.Поступление.TabularSection.Строки.Attribute.Экземпляр" id="1480db0f-e282-513d-b453-cc2e5d50ab03"/>
+			<Metadata name="Document.Поступление.Attribute.Источник" id="5de01a7e-15cc-5141-8422-d6980e3209e9"/>
+			<Metadata name="Document.Поступление.TabularSection.Строки.Attribute.Стоимость" id="6f27a047-0034-5f5b-879e-7d91b9cc86b5"/>
+			<Metadata name="Document.Поступление.TabularSection.Строки" id="8c78f864-965c-5bbe-8596-0382bf48a595"/>
+		</Metadata>
+		<Metadata name="Document.Поступление.ObjectModule" id="ddc6026c-1994-5a7b-a00a-5f8ac3677350.0" configVersion="2c10c7e9ed3aed47a5f05cf497b5de7d00000000"/>
+		<Metadata name="Document.Списание" id="909b6623-2780-58cd-a85d-0b82eb89caec" configVersion="61dc5eb038d03f439cc20055622ea87700000000">
+			<Metadata name="Document.Списание.Attribute.Причина" id="1a446d28-6dd7-58da-8b57-9749db6447b6"/>
+			<Metadata name="Document.Списание.Attribute.ВнешнийКод" id="5e1fb86d-65c8-5bbb-9bb3-b0e184365a91"/>
+			<Metadata name="Document.Списание.Attribute.Выдача" id="5fa85c84-dcbd-596d-8105-13736dc48900"/>
+			<Metadata name="Document.Списание.Attribute.Читатель" id="aee91f6b-7143-5fe7-9b8d-d7808b547658"/>
+			<Metadata name="Document.Списание.TabularSection.Строки" id="e38e021a-9063-56db-bb20-7194293cad27"/>
+			<Metadata name="Document.Списание.TabularSection.Строки.Attribute.Экземпляр" id="e8b786d5-d139-535e-b2a3-2308c7ac4cfd"/>
+			<Metadata name="Document.Списание.TabularSection.Строки.Attribute.Стоимость" id="e905694c-481e-5d26-98c6-f7da948eac23"/>
+		</Metadata>
+		<Metadata name="Document.Списание.ObjectModule" id="909b6623-2780-58cd-a85d-0b82eb89caec.0" configVersion="d0d0e757a677064195e3a1613a9bac4500000000"/>
+		<Metadata name="Enum.РолиВеб" id="12e9b0de-bee6-5dbc-9419-9e601359b624" configVersion="264bf52cd7df8a48ae1ec6e38521090400000000">
+			<Metadata name="Enum.РолиВеб.EnumValue.Библиотекарь" id="67e4c0e6-b26c-50d3-83bb-634371d8baed"/>
+			<Metadata name="Enum.РолиВеб.EnumValue.Читатель" id="8cbc234d-706c-506c-9e49-ba9ccb8b9ceb"/>
+			<Metadata name="Enum.РолиВеб.EnumValue.Бухгалтер" id="9ae85496-a45e-5b14-af89-0b3c8765512e"/>
+		</Metadata>
+		<Metadata name="Enum.СостоянияВыдач" id="c04fef46-1625-5055-8a45-954f77903c71" configVersion="3b52a182d699da498965e176effa391800000000">
+			<Metadata name="Enum.СостоянияВыдач.EnumValue.Активна" id="3be7edd1-1a03-5047-8b55-8ef4dbd5ef03"/>
+			<Metadata name="Enum.СостоянияВыдач.EnumValue.Утеряна" id="907b0a58-e535-548a-952b-46f72543e036"/>
+			<Metadata name="Enum.СостоянияВыдач.EnumValue.Возвращена" id="bc684974-ce82-54c6-abe8-048fcf9f86d3"/>
+		</Metadata>
+		<Metadata name="Enum.СостоянияЭкземпляров" id="9fa20623-675f-504a-b7d1-d5a8a63e92e2" configVersion="88e4ff5a1f51654c89ed5adb230fdb7200000000">
+			<Metadata name="Enum.СостоянияЭкземпляров.EnumValue.Доступен" id="4a85805e-acd7-5cad-8652-58cd1191760b"/>
+			<Metadata name="Enum.СостоянияЭкземпляров.EnumValue.Списан" id="9dcde6cb-f4e0-5cf3-a591-10dadf9ea428"/>
+			<Metadata name="Enum.СостоянияЭкземпляров.EnumValue.Утерян" id="e9373ae4-5426-5349-acbd-52a194eeabc9"/>
+			<Metadata name="Enum.СостоянияЭкземпляров.EnumValue.Выдан" id="f6639bda-5faf-566a-9f52-f43e59ae33a9"/>
+		</Metadata>
+		<Metadata name="HTTPService.BibliusAPI" id="c0490f70-fc66-4aae-b0b3-2ed76ec1b682" configVersion="8b3cdc39808cca45981c5eaed52f6b5000000000">
+			<Metadata name="HTTPService.BibliusAPI.URLTemplate.Data.Method.POST" id="14f786d5-3953-5810-b70d-5d46c71b4359"/>
+			<Metadata name="HTTPService.BibliusAPI.URLTemplate.Ping.Method.GET" id="71b37298-54a1-4ed4-a4fb-16811188216e"/>
+			<Metadata name="HTTPService.BibliusAPI.URLTemplate.Data.Method.GET" id="7b3b73fa-20e0-5f4c-bb2c-27e33a3d4d43"/>
+			<Metadata name="HTTPService.BibliusAPI.URLTemplate.Data" id="96fee239-268f-5aba-bb32-718a0080dd99"/>
+			<Metadata name="HTTPService.BibliusAPI.URLTemplate.Ping" id="a2fff64f-1f1a-43bb-92d0-b162e8b6f339"/>
+			<Metadata name="HTTPService.BibliusAPI.URLTemplate.Data.Method.PATCH" id="c334fc60-913b-5f1f-ae5d-1eab2f29ca05"/>
+			<Metadata name="HTTPService.BibliusAPI.URLTemplate.Data.Method.DELETE" id="ebd9ae62-3311-5f25-8b4c-9f7db6880772"/>
+		</Metadata>
+		<Metadata name="HTTPService.BibliusAPI.Module" id="c0490f70-fc66-4aae-b0b3-2ed76ec1b682.0" configVersion="e9257a4180ef83489d5b0289f07021fe00000000"/>
+		<Metadata name="InformationRegister.ДвижениеФонда" id="20770452-4970-5049-a00d-4939e5031953" configVersion="8a74257d5e5ddf459b4e0df09e042ca500000000">
+			<Metadata name="InformationRegister.ДвижениеФонда.Dimension.Экземпляр" id="22879310-8523-5893-b6b9-a6748299e1d6"/>
+			<Metadata name="InformationRegister.ДвижениеФонда.Resource.Количество" id="22e9307a-0173-5655-a4ab-28de27df70bb"/>
+			<Metadata name="InformationRegister.ДвижениеФонда.Resource.Стоимость" id="2b49e79f-e0c8-5c95-bdd1-638682e3ad39"/>
+			<Metadata name="InformationRegister.ДвижениеФонда.Dimension.Документ" id="2f3452a2-5f7a-5d90-abf0-c02d64c1cdba"/>
+			<Metadata name="InformationRegister.ДвижениеФонда.Resource.Списание" id="59fc9622-fbf1-592e-93bd-be222c35b02f"/>
+			<Metadata name="InformationRegister.ДвижениеФонда.Resource.ДатаДвижения" id="aec8f8c9-0220-5655-9e4e-4bbc35f9afbf"/>
+		</Metadata>
+		<Metadata name="InformationRegister.ЖурналОпераций" id="e014ef29-06a0-5092-b67e-06e521a64e05" configVersion="864b7ec03f364b42ab4a262060d3b3d900000000">
+			<Metadata name="InformationRegister.ЖурналОпераций.Resource.КлючОбъекта" id="04b4208e-dd9d-5ceb-b3de-659f3bc50462"/>
+			<Metadata name="InformationRegister.ЖурналОпераций.Resource.ВремяСобытия" id="397494a9-3e34-52c8-a7c7-646d39ad4c5b"/>
+			<Metadata name="InformationRegister.ЖурналОпераций.Resource.Объект" id="584119bb-6e63-5f29-b070-0cfe92143118"/>
+			<Metadata name="InformationRegister.ЖурналОпераций.Resource.Действие" id="6a6b71f4-026e-5499-bb24-13383f09dc42"/>
+			<Metadata name="InformationRegister.ЖурналОпераций.Resource.Исполнитель" id="7b4d9fb4-b5bd-5211-bca4-f97abfee5d14"/>
+			<Metadata name="InformationRegister.ЖурналОпераций.Dimension.Событие" id="7e96161e-10e0-56c1-9a42-78d6827de051"/>
+			<Metadata name="InformationRegister.ЖурналОпераций.Resource.Изменения" id="b3e272e3-ebf0-571a-80a2-bee67112ae11"/>
+		</Metadata>
+		<Metadata name="InformationRegister.ОтправкиУведомлений" id="5167a0a9-114b-5f84-8fff-6c7e1a953ca2" configVersion="72af103021d1214d95ce9b83527df5c500000000">
+			<Metadata name="InformationRegister.ОтправкиУведомлений.Resource.Состояние" id="14924778-c211-5a19-b2d4-6a45671431c6"/>
+			<Metadata name="InformationRegister.ОтправкиУведомлений.Resource.Вид" id="3894bdaa-3c92-53e2-b123-9bee8ad09d1d"/>
+			<Metadata name="InformationRegister.ОтправкиУведомлений.Resource.ВремяПопытки" id="3cccf637-d871-55e4-97b8-18c434ef8425"/>
+			<Metadata name="InformationRegister.ОтправкиУведомлений.Resource.Адресат" id="4c871bd1-1d2e-5c0d-b64e-01ed0b8fe94d"/>
+			<Metadata name="InformationRegister.ОтправкиУведомлений.Resource.Срок" id="7388d396-cf51-5897-b705-9eddd865b8e5"/>
+			<Metadata name="InformationRegister.ОтправкиУведомлений.Dimension.КлючОтправки" id="7590a548-5da3-5f17-9f0e-10746dca2254"/>
+			<Metadata name="InformationRegister.ОтправкиУведомлений.Resource.Выдача" id="962bae80-de3e-5e22-a90b-5ab154d0ccb6"/>
+		</Metadata>
+		<Metadata name="Language.Русский" id="1cb256c0-2cb8-425d-9f44-8239233da9d4" configVersion="953736c5c6b074419d3bdc0f733ffd8500000000"/>
+		<Metadata name="Report.ДвижениеФонда" id="64f37dca-dfa9-5097-b99e-177c5d25423e" configVersion="a40918dc545f0546bec755982edead4f00000000"/>
+		<Metadata name="Report.ДвижениеФонда.ObjectModule" id="64f37dca-dfa9-5097-b99e-177c5d25423e.0" configVersion="17df80cb78256244ad86a5c96466604300000000"/>
+		<Metadata name="Report.ДвижениеФонда.Template.Схема" id="99adc2f9-2a25-51e5-9dd8-0fc9bd15506f" configVersion="a0ba469833d1e84bb52c178efb4777c200000000"/>
+		<Metadata name="Report.ДвижениеФонда.Template.Схема.Template" id="99adc2f9-2a25-51e5-9dd8-0fc9bd15506f.0" configVersion="ba9e395585871b4c9232e58d7db5ad8800000000"/>
+		<Metadata name="Report.СоставИСтоимостьФонда" id="01b61d35-50f3-584c-80c8-f38c37b7887a" configVersion="9e1515e285503b498badbcfe2b5af6f900000000"/>
+		<Metadata name="Report.СоставИСтоимостьФонда.ObjectModule" id="01b61d35-50f3-584c-80c8-f38c37b7887a.0" configVersion="bdc1b05276a2704db2232108f2023bf400000000"/>
+		<Metadata name="Report.СоставИСтоимостьФонда.Template.Схема" id="ff6db8d2-f176-5b70-a4e7-7b8dcc41f3f3" configVersion="2ae75fc2e62bc4468b414d4c910a113000000000"/>
+		<Metadata name="Report.СоставИСтоимостьФонда.Template.Схема.Template" id="ff6db8d2-f176-5b70-a4e7-7b8dcc41f3f3.0" configVersion="93f0ac5aab423c4c95fe8e24345e805b00000000"/>
+		<Metadata name="Role.АдминистраторБиблиус" id="2d801881-6fb0-5b7b-9ee3-e91a719aeae3" configVersion="c559104d77ee0344b156b7e1d2cd7e4000000000"/>
+		<Metadata name="Role.АдминистраторБиблиус.Rights" id="2d801881-6fb0-5b7b-9ee3-e91a719aeae3.0" configVersion="dc4ada453187f14ebfdee604b40b01f400000000"/>
+		<Metadata name="Role.БухгалтерБиблиус" id="b83a746f-57f5-5594-a3af-4981293a24fa" configVersion="e3debaeef1c4a841ab2422c9b809a24500000000"/>
+		<Metadata name="Role.БухгалтерБиблиус.Rights" id="b83a746f-57f5-5594-a3af-4981293a24fa.0" configVersion="9ed985f1f5ba854fadd64a9a7b97dbe100000000"/>
+		<Metadata name="Role.ОбменБиблиус" id="36419047-8016-5a4e-8fc2-c34a4d11641b" configVersion="dfb0af3e05e25d4f8d1670f3f503d1e700000000"/>
+		<Metadata name="Role.ОбменБиблиус.Rights" id="36419047-8016-5a4e-8fc2-c34a4d11641b.0" configVersion="9dd93376900f0e469ed43762c9734a7300000000"/>
+		<Metadata name="Subsystem.УчетФонда" id="5cf62aed-9923-5e14-b90e-96b281764d3d" configVersion="5216a9d75218d74db7ebe176d104f9b100000000"/>
+		<Metadata name="InformationRegister.ЗаявкиНаВыдачу" id="a3c6f453-b5be-4fdc-9bfb-c2d4cf43a458" configVersion="63bbb7bf6773895d3921d5baa73608ba00000000">
+			<Metadata name="InformationRegister.ЗаявкиНаВыдачу.Resource.Читатель" id="e1b4ee7f-f197-4ae5-ad56-abaa831d337b"/>
+			<Metadata name="InformationRegister.ЗаявкиНаВыдачу.Resource.КлючИздания" id="beee4008-d483-488f-80fc-67bf3880fcd8"/>
+			<Metadata name="InformationRegister.ЗаявкиНаВыдачу.Resource.Название" id="cc415bff-25b0-4c77-bd48-1ec17c540fbb"/>
+			<Metadata name="InformationRegister.ЗаявкиНаВыдачу.Resource.Автор" id="2d13a33c-72e4-41d7-bb29-5209a602fdde"/>
+			<Metadata name="InformationRegister.ЗаявкиНаВыдачу.Resource.Создана" id="2d79d955-e207-4694-bdb0-08594982ec41"/>
+			<Metadata name="InformationRegister.ЗаявкиНаВыдачу.Resource.Состояние" id="950c1f0b-b5db-4bf0-9e65-c94117c757e3"/>
+			<Metadata name="InformationRegister.ЗаявкиНаВыдачу.Resource.Выдача" id="1c3f3838-f992-4667-b763-f5d0f8acdbf4"/>
+			<Metadata name="InformationRegister.ЗаявкиНаВыдачу.Resource.Изменена" id="6fca9bcf-d7b0-4cbf-8180-d0690779791d"/>
+			<Metadata name="InformationRegister.ЗаявкиНаВыдачу.Resource.Комментарий" id="03e28c0a-b9c0-4c78-85cc-5ba0a33084af"/>
+			<Metadata name="InformationRegister.ЗаявкиНаВыдачу.Dimension.Заявка" id="ca077a4d-5d07-466c-b45c-c34acad845b1"/>
+		</Metadata>
+	</ConfigVersions>
+</ConfigDumpInfo>

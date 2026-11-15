@@ -1,0 +1,35 @@
+[
+  {
+    "login": "librarian",
+    "name": "Библиотекарь (демо)",
+    "role": "librarian",
+    "password": "задайте-пароль"
+  },
+  {
+    "login": "librarian2",
+    "name": "Библиотекарь 2 (демо)",
+    "role": "librarian",
+    "password": "задайте-пароль"
+  },
+  {
+    "login": "reader1",
+    "name": "Читатель R-0007",
+    "role": "reader",
+    "reader_id": "R-0007",
+    "password": "задайте-пароль"
+  },
+  {
+    "login": "reader2",
+    "name": "Читатель R-0015",
+    "role": "reader",
+    "reader_id": "R-0015",
+    "password": "задайте-пароль"
+  },
+  {
+    "login": "reader3",
+    "name": "Читатель R-0003",
+    "role": "reader",
+    "reader_id": "R-0003",
+    "password": "задайте-пароль"
+  }
+]

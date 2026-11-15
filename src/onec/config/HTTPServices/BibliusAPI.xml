@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<MetaDataObject xmlns="http://v8.1c.ru/8.3/MDClasses" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:cmi="http://v8.1c.ru/8.2/managed-application/cmi" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:pal="http://v8.1c.ru/8.1/data/ui/colors/palette" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xen="http://v8.1c.ru/8.3/xcf/enums" xmlns:xpr="http://v8.1c.ru/8.3/xcf/predef" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.21">
+	<HTTPService uuid="c0490f70-fc66-4aae-b0b3-2ed76ec1b682">
+		<Properties>
+			<Name>BibliusAPI</Name>
+			<Synonym/>
+			<Comment>Диагностический Ping</Comment>
+			<RootURL>biblius</RootURL>
+			<ReuseSessions>DontUse</ReuseSessions>
+			<SessionMaxAge>20</SessionMaxAge>
+		</Properties>
+		<ChildObjects>
+			<URLTemplate uuid="a2fff64f-1f1a-43bb-92d0-b162e8b6f339">
+				<Properties>
+					<Name>Ping</Name>
+					<Synonym/>
+					<Comment/>
+					<Template>/ping</Template>
+				</Properties>
+				<ChildObjects>
+					<Method uuid="71b37298-54a1-4ed4-a4fb-16811188216e">
+						<Properties>
+							<Name>GET</Name>
+							<Synonym/>
+							<Comment/>
+							<HTTPMethod>GET</HTTPMethod>
+							<Handler>PingGET</Handler>
+						</Properties>
+					</Method>
+				</ChildObjects>
+			</URLTemplate>
+			<URLTemplate uuid="96fee239-268f-5aba-bb32-718a0080dd99">
+				<Properties>
+					<Name>Data</Name>
+					<Synonym/>
+					<Comment/>
+					<Template>/data/{resource}</Template>
+				</Properties>
+				<ChildObjects>
+					<Method uuid="7b3b73fa-20e0-5f4c-bb2c-27e33a3d4d43">
+						<Properties>
+							<Name>GET</Name>
+							<Synonym/>
+							<Comment/>
+							<HTTPMethod>GET</HTTPMethod>
+							<Handler>DataRequest</Handler>
+						</Properties>
+					</Method>
+					<Method uuid="14f786d5-3953-5810-b70d-5d46c71b4359">
+						<Properties>
+							<Name>POST</Name>
+							<Synonym/>
+							<Comment/>
+							<HTTPMethod>POST</HTTPMethod>
+							<Handler>DataRequest</Handler>
+						</Properties>
+					</Method>
+					<Method uuid="c334fc60-913b-5f1f-ae5d-1eab2f29ca05">
+						<Properties>
+							<Name>PATCH</Name>
+							<Synonym/>
+							<Comment/>
+							<HTTPMethod>PATCH</HTTPMethod>
+							<Handler>DataRequest</Handler>
+						</Properties>
+					</Method>
+					<Method uuid="ebd9ae62-3311-5f25-8b4c-9f7db6880772">
+						<Properties>
+							<Name>DELETE</Name>
+							<Synonym/>
+							<Comment/>
+							<HTTPMethod>DELETE</HTTPMethod>
+							<Handler>DataRequest</Handler>
+						</Properties>
+					</Method>
+				</ChildObjects>
+			</URLTemplate>
+		</ChildObjects>
+	</HTTPService>
+</MetaDataObject>

@@ -1,0 +1,452 @@
+openapi: 3.0.3
+info:
+  title: API ИС «Библиус»
+  version: 1.1.0
+  description: |
+    REST API сервера приложения «Библиус» (Node.js). Сервер принимает запросы веб-клиента,
+    проверяет сессию и роль и обращается к HTTP-сервису 1С `BibliusAPI` (`/hs/biblius/data/{resource}`).
+    Расчёты (статус экземпляра, просрочка, KPI) выполняются в 1С.
+
+    **Авторизация.** `POST /api/auth/login` возвращает cookie `bsid` (HttpOnly, SameSite=Strict, срок 8 ч).
+    Роли: `librarian` — библиотекарь, `reader` — читатель. Бухгалтер работает в клиенте 1С.
+
+    **Ошибки.** Любая ошибка возвращается в формате `Error`: машинный код, текст для пользователя и
+    `request_id` для поиска в журнале сервера.
+
+    **Постраничный вывод.** Списки книг, читателей, выдач, журнала операций и публичного каталога
+    принимают `page` (с 1) и `per_page` (1–200, по умолчанию 50). Без `page` возвращается весь список.
+
+    **Даты** — `YYYY-MM-DD`, время — ISO 8601. Деньги — строка с двумя знаками после точки.
+servers:
+  - url: http://localhost:3001
+    description: Стенд (сервер приложения)
+tags:
+  - name: Служебное
+  - name: Учётная запись
+  - name: Публичный каталог
+  - name: Фонд
+  - name: Читатели
+  - name: Выдачи
+  - name: Заявки
+  - name: Отчёты
+  - name: Уведомления
+  - name: Импорт и журнал
+security:
+  - session: []
+components:
+  securitySchemes:
+    session:
+      type: apiKey
+      in: cookie
+      name: bsid
+  parameters:
+    Page: { name: page, in: query, schema: { type: integer, minimum: 1 }, description: Номер страницы }
+    PerPage: { name: per_page, in: query, schema: { type: integer, minimum: 1, maximum: 200, default: 50 } }
+    Date: { name: date, in: query, schema: { type: string, format: date }, description: Дата среза (по умолчанию сегодня) }
+    ReportFilters_from: { name: from, in: query, schema: { type: string, format: date }, description: Выдано с }
+    ReportFilters_to: { name: to, in: query, schema: { type: string, format: date }, description: Выдано по }
+    ReportFilters_group: { name: group, in: query, schema: { type: string }, description: Учебная группа }
+    ReportFilters_author: { name: author, in: query, schema: { type: string } }
+    ReportFilters_udc: { name: udc, in: query, schema: { type: string } }
+    ReportFilters_min: { name: min_days, in: query, schema: { type: integer, minimum: 1 } }
+    ReportFilters_max: { name: max_days, in: query, schema: { type: integer, minimum: 1 } }
+  responses:
+    Error400: { description: Неверные данные, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    Error401: { description: Нет сессии или неверный логин/пароль, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    Error403: { description: Недостаточно прав для роли, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    Error404: { description: Объект не найден, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    Error409: { description: Конфликт бизнес-правил (экземпляр выдан, дубль, билет уже привязан), content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+    Error503: { description: 1С недоступна или сервер не смог войти в 1С, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  schemas:
+    Error:
+      type: object
+      required: [code, message, request_id]
+      properties:
+        code: { type: string, example: CONFLICT, description: 'BAD_DATA, UNAUTHORIZED, FORBIDDEN, NOT_FOUND, CONFLICT, NOT_LINKED, BAD_CODE, TOO_MANY, ONEC_UNAVAILABLE, ONEC_AUTH, BUSINESS_ERROR' }
+        message: { type: string, example: Экземпляр недоступен для выдачи }
+        request_id: { type: string, example: 9a23d5b1 }
+    Page:
+      type: object
+      properties:
+        total: { type: integer }
+        page: { type: integer }
+        per_page: { type: integer }
+        pages: { type: integer }
+    User:
+      type: object
+      properties:
+        login: { type: string }
+        role: { type: string, enum: [librarian, reader] }
+        reader_id: { type: string, nullable: true, description: Номер привязанного читательского билета }
+        full_name: { type: string, description: Только для читателя с привязанным билетом }
+        email_masked: { type: string, example: 'r*******@example.test' }
+    Book:
+      type: object
+      required: [book_code, title, author, publication_year, udc, cost]
+      properties:
+        book_code: { type: string, example: B-0001 }
+        title: { type: string }
+        author: { type: string }
+        publication_year: { type: integer }
+        udc: { type: string, example: '004.4' }
+        cost: { type: string, example: '850.00' }
+        status: { type: string, enum: [Доступен, Выдан, Утерян, Списан], readOnly: true }
+        section: { type: string }
+        publisher: { type: string }
+        isbn: { type: string }
+        pages: { type: integer }
+        cover_url: { type: string, format: uri }
+        annotation: { type: string }
+    Edition:
+      type: object
+      description: Издание в публичном каталоге (экземпляры с одинаковым ISBN или названием, автором и годом). Коды экземпляров не раскрываются.
+      properties:
+        key: { type: string, example: e-9b1ede362823 }
+        title: { type: string }
+        author: { type: string }
+        year: { type: integer }
+        udc: { type: string }
+        section: { type: string }
+        publisher: { type: string }
+        isbn: { type: string }
+        pages: { type: integer }
+        annotation: { type: string }
+        cover_url: { type: string }
+        copies: { type: integer }
+        available: { type: integer }
+        received_date: { type: string, format: date, description: Дата последнего поступления }
+        loans_count: { type: integer, description: Сколько раз брали (для вкладки «Популярное») }
+    Reader:
+      type: object
+      required: [reader_id, full_name, group]
+      properties:
+        reader_id: { type: string, example: R-0001 }
+        full_name: { type: string }
+        group: { type: string, example: ИКБО-01-24 }
+        email: { type: string, format: email }
+    Loan:
+      type: object
+      properties:
+        loan_id: { type: string }
+        book_code: { type: string }
+        reader_id: { type: string }
+        full_name: { type: string }
+        group: { type: string }
+        title: { type: string }
+        author: { type: string }
+        udc: { type: string }
+        issue_date: { type: string, format: date }
+        due_date: { type: string, format: date }
+        return_date: { type: string, format: date, nullable: true }
+        lost_date: { type: string, format: date, nullable: true }
+        status: { type: string, enum: [Активна, Возвращена, Утеряна] }
+        active: { type: boolean }
+        days_overdue: { type: integer, description: Рассчитывается в 1С на дату среза }
+    Request:
+      type: object
+      properties:
+        request_id: { type: string }
+        reader_id: { type: string }
+        full_name: { type: string }
+        group: { type: string }
+        edition_key: { type: string }
+        title: { type: string }
+        author: { type: string }
+        created: { type: string }
+        status: { type: string, enum: [Новая, Выдана, Отклонена, Отменена] }
+        loan_id: { type: string }
+        comment: { type: string }
+    OverdueReport:
+      type: object
+      properties:
+        date: { type: string, format: date }
+        active_count: { type: integer }
+        overdue_count: { type: integer }
+        overdue_percent: { type: number, nullable: true, description: 'Доля просроченных, %, 2 знака; null — нет активных выдач' }
+        items: { type: array, items: { $ref: '#/components/schemas/Loan' } }
+    OverdueStats:
+      type: object
+      properties:
+        date: { type: string, format: date }
+        count: { type: integer, description: Выдач с просрочкой (на руках и возвращённых с опозданием) }
+        mean: { type: number, nullable: true }
+        median: { type: number, nullable: true }
+        top: { type: integer }
+        top_readers:
+          type: array
+          items: { type: object, properties: { reader_id: { type: string }, full_name: { type: string }, group: { type: string }, loans: { type: integer }, days: { type: integer } } }
+        top_books:
+          type: array
+          items: { type: object, properties: { title: { type: string }, author: { type: string }, loans: { type: integer }, days: { type: integer } } }
+    Notification:
+      type: object
+      properties:
+        key: { type: string, example: 'L-0001|overdue|2026-10-01', description: Ключ идемпотентности }
+        loan_id: { type: string }
+        kind: { type: string, enum: [reminder, overdue] }
+        due_date: { type: string, format: date }
+        email: { type: string }
+        status: { type: string, example: Отправлено, description: 'Отправлено, Нет адреса, Ошибка: …' }
+        time: { type: string }
+    ImportResult:
+      type: object
+      properties:
+        kind: { type: string }
+        total: { type: integer }
+        accepted: { type: integer }
+        updated: { type: integer }
+        skipped: { type: integer }
+        rejected: { type: integer }
+        rows:
+          type: array
+          items: { type: object, properties: { line: { type: integer }, key: { type: string }, result: { type: string }, message: { type: string } } }
+paths:
+  /api/health:
+    get:
+      tags: [Служебное]
+      summary: Проверка сервера и связи с 1С
+      security: []
+      responses:
+        '200': { description: Состояние, content: { application/json: { schema: { type: object, properties: { ok: { type: boolean }, onec: { type: object } } } } } }
+  /api/auth/login:
+    post:
+      tags: [Учётная запись]
+      summary: Вход
+      security: []
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [login, password], properties: { login: { type: string }, password: { type: string, format: password } } } } } }
+      responses:
+        '200': { description: Вход выполнен, устанавливается cookie bsid, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+        '401': { $ref: '#/components/responses/Error401' }
+        '403': { $ref: '#/components/responses/Error403' }
+  /api/auth/logout:
+    post:
+      tags: [Учётная запись]
+      summary: Выход
+      responses: { '200': { description: Сессия закрыта } }
+  /api/auth/me:
+    get:
+      tags: [Учётная запись]
+      summary: Текущий пользователь
+      responses:
+        '200': { description: Пользователь, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+        '401': { $ref: '#/components/responses/Error401' }
+  /api/auth/register:
+    post:
+      tags: [Учётная запись]
+      summary: Регистрация читателя (без билета) с автоматическим входом
+      description: Не более 10 попыток за 10 минут с одного адреса. Билет привязывается отдельно.
+      security: []
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [login, password], properties: { name: { type: string, maxLength: 200 }, login: { type: string, pattern: '^[A-Za-z0-9._-]{3,40}$' }, password: { type: string, minLength: 8 } } } } } }
+      responses:
+        '200': { description: Учётная запись создана, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+        '400': { $ref: '#/components/responses/Error400' }
+        '409': { $ref: '#/components/responses/Error409' }
+        '429': { description: Слишком много попыток, content: { application/json: { schema: { $ref: '#/components/schemas/Error' } } } }
+  /api/me/link/start:
+    post:
+      tags: [Учётная запись]
+      summary: Привязка билета, шаг 1 — отправить код на e-mail из карточки читателя
+      description: Код из 6 цифр действует 10 минут. Без настроенного SMTP письмо сохраняется в папку server/outbox.
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [reader_id], properties: { reader_id: { type: string, example: R-0001 } } } } } }
+      responses:
+        '200': { description: Код отправлен, content: { application/json: { schema: { type: object, properties: { sent_to: { type: string }, mode: { type: string, enum: [smtp, outbox] } } } } } }
+        '404': { $ref: '#/components/responses/Error404' }
+        '409': { $ref: '#/components/responses/Error409' }
+  /api/me/link/confirm:
+    post:
+      tags: [Учётная запись]
+      summary: Привязка билета, шаг 2 — подтвердить код
+      description: Не более 5 попыток на один код.
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [code], properties: { code: { type: string, pattern: '^\d{6}$' } } } } } }
+      responses:
+        '200': { description: Билет привязан, content: { application/json: { schema: { $ref: '#/components/schemas/User' } } } }
+        '400': { $ref: '#/components/responses/Error400' }
+        '409': { $ref: '#/components/responses/Error409' }
+  /api/me/loans:
+    get:
+      tags: [Выдачи]
+      summary: Мои выдачи (читатель)
+      parameters: [{ $ref: '#/components/parameters/Date' }]
+      responses:
+        '200': { description: 'Выдачи читателя; без билета — пустой список и not_linked: true', content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { $ref: '#/components/schemas/Loan' } }, not_linked: { type: boolean } } } } } }
+  /api/public/catalog:
+    get:
+      tags: [Публичный каталог]
+      summary: Каталог изданий для всех посетителей
+      security: []
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/PerPage' }]
+      responses:
+        '200': { description: Издания, content: { application/json: { schema: { allOf: [{ $ref: '#/components/schemas/Page' }, { type: object, properties: { items: { type: array, items: { $ref: '#/components/schemas/Edition' } } } }] } } } }
+  /api/public/catalog/{key}:
+    get:
+      tags: [Публичный каталог]
+      summary: Карточка издания
+      security: []
+      parameters: [{ name: key, in: path, required: true, schema: { type: string } }]
+      responses:
+        '200': { description: Издание, content: { application/json: { schema: { $ref: '#/components/schemas/Edition' } } } }
+        '404': { $ref: '#/components/responses/Error404' }
+  /api/books:
+    get:
+      tags: [Фонд]
+      summary: Экземпляры фонда (FR-01)
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/PerPage' }]
+      responses:
+        '200': { description: Экземпляры, content: { application/json: { schema: { allOf: [{ $ref: '#/components/schemas/Page' }, { type: object, properties: { items: { type: array, items: { $ref: '#/components/schemas/Book' } } } }] } } } }
+    post:
+      tags: [Фонд]
+      summary: Добавить экземпляр (библиотекарь)
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/Book' } } } }
+      responses:
+        '200': { description: Создан, content: { application/json: { schema: { $ref: '#/components/schemas/Book' } } } }
+        '400': { $ref: '#/components/responses/Error400' }
+        '409': { $ref: '#/components/responses/Error409' }
+  /api/books/{code}:
+    parameters: [{ name: code, in: path, required: true, schema: { type: string } }]
+    get:
+      tags: [Фонд]
+      summary: Экземпляр
+      responses: { '200': { description: Экземпляр, content: { application/json: { schema: { $ref: '#/components/schemas/Book' } } } }, '404': { $ref: '#/components/responses/Error404' } }
+    patch:
+      tags: [Фонд]
+      summary: Изменить карточку (библиотекарь)
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/Book' } } } }
+      responses: { '200': { description: Изменён }, '400': { $ref: '#/components/responses/Error400' }, '404': { $ref: '#/components/responses/Error404' } }
+    delete:
+      tags: [Фонд]
+      summary: Пометить на удаление (если нет выдач)
+      responses: { '200': { description: Помечен }, '409': { $ref: '#/components/responses/Error409' } }
+  /api/readers:
+    get:
+      tags: [Читатели]
+      summary: Читатели (библиотекарь)
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/PerPage' }]
+      responses: { '200': { description: Читатели, content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { $ref: '#/components/schemas/Reader' } } } } } } }, '403': { $ref: '#/components/responses/Error403' } }
+    post:
+      tags: [Читатели]
+      summary: Добавить читателя
+      requestBody: { required: true, content: { application/json: { schema: { $ref: '#/components/schemas/Reader' } } } }
+      responses: { '200': { description: Создан }, '400': { $ref: '#/components/responses/Error400' }, '409': { $ref: '#/components/responses/Error409' } }
+  /api/readers/{id}:
+    parameters: [{ name: id, in: path, required: true, schema: { type: string } }]
+    get: { tags: [Читатели], summary: Читатель, responses: { '200': { description: Читатель, content: { application/json: { schema: { $ref: '#/components/schemas/Reader' } } } }, '404': { $ref: '#/components/responses/Error404' } } }
+    patch: { tags: [Читатели], summary: Изменить читателя, requestBody: { content: { application/json: { schema: { $ref: '#/components/schemas/Reader' } } } }, responses: { '200': { description: Изменён } } }
+    delete: { tags: [Читатели], summary: Пометить на удаление (если нет выдач), responses: { '200': { description: Помечен }, '409': { $ref: '#/components/responses/Error409' } } }
+  /api/loans:
+    get:
+      tags: [Выдачи]
+      summary: Выдачи с расчётом просрочки на дату (библиотекарь)
+      parameters: [{ $ref: '#/components/parameters/Date' }, { name: reader_id, in: query, schema: { type: string } }, { $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/PerPage' }]
+      responses: { '200': { description: Выдачи, content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { $ref: '#/components/schemas/Loan' } } } } } } } }
+    post:
+      tags: [Выдачи]
+      summary: Оформить выдачу (FR-04)
+      description: Отказ, если экземпляр не «Доступен», читатель помечен на удаление или срок раньше даты выдачи.
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [book_code, reader_id, due_date], properties: { book_code: { type: string }, reader_id: { type: string }, issue_date: { type: string, format: date }, due_date: { type: string, format: date } } } } } }
+      responses: { '200': { description: Выдача, content: { application/json: { schema: { $ref: '#/components/schemas/Loan' } } } }, '400': { $ref: '#/components/responses/Error400' }, '409': { $ref: '#/components/responses/Error409' } }
+  /api/loans/{id}/return:
+    post:
+      tags: [Выдачи]
+      summary: Оформить возврат (FR-05)
+      parameters: [{ name: id, in: path, required: true, schema: { type: string } }]
+      requestBody: { content: { application/json: { schema: { type: object, properties: { return_date: { type: string, format: date } } } } } }
+      responses: { '200': { description: Выдача закрыта, content: { application/json: { schema: { $ref: '#/components/schemas/Loan' } } } }, '409': { $ref: '#/components/responses/Error409' } }
+  /api/loans/{id}/loss:
+    post:
+      tags: [Выдачи]
+      summary: Отметить утерю
+      parameters: [{ name: id, in: path, required: true, schema: { type: string } }]
+      requestBody: { content: { application/json: { schema: { type: object, properties: { lost_date: { type: string, format: date } } } } } }
+      responses: { '200': { description: Экземпляр «Утерян» }, '409': { $ref: '#/components/responses/Error409' } }
+  /api/requests:
+    get:
+      tags: [Заявки]
+      summary: Заявки «Взять почитать» (библиотекарь — все, читатель — свои)
+      parameters: [{ name: status, in: query, schema: { type: string, enum: [Новая, Выдана, Отклонена, Отменена] } }]
+      responses: { '200': { description: Заявки, content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { $ref: '#/components/schemas/Request' } } } } } } } }
+    post:
+      tags: [Заявки]
+      summary: Оставить заявку (читатель с привязанным билетом)
+      description: Не более 5 активных заявок, повторная заявка на то же издание не принимается.
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [edition_key], properties: { edition_key: { type: string } } } } } }
+      responses: { '200': { description: Заявка, content: { application/json: { schema: { $ref: '#/components/schemas/Request' } } } }, '409': { $ref: '#/components/responses/Error409' } }
+  /api/requests/{id}/cancel:
+    post: { tags: [Заявки], summary: Отменить свою заявку (читатель), parameters: [{ name: id, in: path, required: true, schema: { type: string } }], responses: { '200': { description: Отменена } } }
+  /api/requests/{id}/reject:
+    post:
+      tags: [Заявки]
+      summary: Отклонить заявку (библиотекарь)
+      parameters: [{ name: id, in: path, required: true, schema: { type: string } }]
+      requestBody: { content: { application/json: { schema: { type: object, properties: { comment: { type: string } } } } } }
+      responses: { '200': { description: Отклонена } }
+  /api/requests/{id}/issue:
+    post:
+      tags: [Заявки]
+      summary: Выдать по заявке (библиотекарь)
+      description: Берётся указанный или первый свободный экземпляр издания, создаётся выдача, заявка получает статус «Выдана».
+      parameters: [{ name: id, in: path, required: true, schema: { type: string } }]
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [due_date], properties: { due_date: { type: string, format: date }, book_code: { type: string } } } } } }
+      responses: { '200': { description: Заявка и выдача, content: { application/json: { schema: { type: object, properties: { request: { $ref: '#/components/schemas/Request' }, loan: { $ref: '#/components/schemas/Loan' } } } } } }, '409': { $ref: '#/components/responses/Error409' } }
+  /api/reports/overdue:
+    get:
+      tags: [Отчёты]
+      summary: Отчёт «Просрочки» и KPI (FR-07, FR-08)
+      parameters: &rep
+        - { $ref: '#/components/parameters/Date' }
+        - { $ref: '#/components/parameters/ReportFilters_from' }
+        - { $ref: '#/components/parameters/ReportFilters_to' }
+        - { $ref: '#/components/parameters/ReportFilters_group' }
+        - { $ref: '#/components/parameters/ReportFilters_author' }
+        - { $ref: '#/components/parameters/ReportFilters_udc' }
+        - { $ref: '#/components/parameters/ReportFilters_min' }
+        - { $ref: '#/components/parameters/ReportFilters_max' }
+      responses: { '200': { description: Отчёт, content: { application/json: { schema: { $ref: '#/components/schemas/OverdueReport' } } } } }
+  /api/reports/overdue/export:
+    get:
+      tags: [Отчёты]
+      summary: Экспорт отчёта в CSV (UTF-8 с BOM, разделитель «;»)
+      parameters: *rep
+      responses: { '200': { description: Файл CSV, content: { text/csv: { schema: { type: string } } } } }
+  /api/reports/overdue/stats:
+    get:
+      tags: [Отчёты]
+      summary: Статистика просрочек — средняя, медиана, ТОП-N (FR-19)
+      parameters:
+        - { $ref: '#/components/parameters/Date' }
+        - { $ref: '#/components/parameters/ReportFilters_from' }
+        - { $ref: '#/components/parameters/ReportFilters_to' }
+        - { $ref: '#/components/parameters/ReportFilters_group' }
+        - { $ref: '#/components/parameters/ReportFilters_author' }
+        - { $ref: '#/components/parameters/ReportFilters_udc' }
+        - { $ref: '#/components/parameters/ReportFilters_min' }
+        - { $ref: '#/components/parameters/ReportFilters_max' }
+        - { name: top, in: query, schema: { type: integer, minimum: 1, maximum: 50, default: 5 } }
+      responses: { '200': { description: Статистика, content: { application/json: { schema: { $ref: '#/components/schemas/OverdueStats' } } } } }
+  /api/notifications:
+    get:
+      tags: [Уведомления]
+      summary: Журнал писем читателям (FR-20)
+      responses:
+        '200':
+          description: Журнал, режим отправки и последние письма из outbox
+          content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { $ref: '#/components/schemas/Notification' } }, mode: { type: string, enum: [smtp, outbox] }, remind_days: { type: integer, example: 3 }, last_run: { type: object, nullable: true }, outbox: { type: array, items: { type: object, properties: { file: { type: string }, to: { type: string }, subject: { type: string }, date: { type: string }, text: { type: string } } } } } } } }
+  /api/notifications/run:
+    post:
+      tags: [Уведомления]
+      summary: Запустить рассылку сейчас
+      description: Рассылка также запускается автоматически каждый день в NOTIFY_TIME (по Москве). Повторно по тому же ключу письмо не отправляется.
+      responses: { '200': { description: Итог, content: { application/json: { schema: { type: object, properties: { sent: { type: integer }, skipped: { type: integer }, noEmail: { type: integer }, failed: { type: integer }, started: { type: string }, finished: { type: string } } } } } } }
+  /api/import/{kind}:
+    post:
+      tags: [Импорт и журнал]
+      summary: Импорт CSV (FR-09…FR-12)
+      description: Файл UTF-8, разделитель «;», до 5 МБ. Дубли пропускаются, расхождения отклоняются с указанием строки.
+      parameters: [{ name: kind, in: path, required: true, schema: { type: string, enum: [books, readers, loans] } }]
+      requestBody: { required: true, content: { text/csv: { schema: { type: string } } } }
+      responses: { '200': { description: Итог по строкам, content: { application/json: { schema: { $ref: '#/components/schemas/ImportResult' } } } }, '400': { $ref: '#/components/responses/Error400' } }
+  /api/audit:
+    get:
+      tags: [Импорт и журнал]
+      summary: Журнал операций (FR-18), новые записи первыми
+      parameters: [{ $ref: '#/components/parameters/Page' }, { $ref: '#/components/parameters/PerPage' }]
+      responses: { '200': { description: Записи, content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { type: object, properties: { id: { type: string }, timestamp: { type: string }, actor: { type: string }, entity: { type: string }, key: { type: string }, action: { type: string } } } } } } } } } }

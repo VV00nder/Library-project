@@ -1,0 +1,12 @@
+{
+  "name": "biblius-server",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Сервер приложения Библиус: API для веб-интерфейса, авторизация, CSV, обмен с 1С",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "start": "node server.mjs",
+    "seed": "node scripts/seed.mjs"
+  }
+}

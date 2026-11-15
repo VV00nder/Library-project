@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<DataCompositionSchema xmlns="http://v8.1c.ru/8.1/data-composition-system/schema" xmlns:dcscom="http://v8.1c.ru/8.1/data-composition-system/common" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<dataSource>
+		<name>База</name>
+		<dataSourceType>Local</dataSourceType>
+	</dataSource>
+	<dataSet xsi:type="DataSetQuery">
+		<name>Данные</name>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Операция</dataPath>
+			<field>Операция</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Группа</dataPath>
+			<field>Группа</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Количество</dataPath>
+			<field>Количество</field>
+		</field>
+		<field xsi:type="DataSetFieldField">
+			<dataPath>Стоимость</dataPath>
+			<field>Стоимость</field>
+		</field>
+		<dataSource>База</dataSource>
+		<query>ВЫБРАТЬ "Начальный остаток" КАК Операция, "Фонд" КАК Группа, ЕСТЬNULL(СУММА(ВЫБОР КОГДА Д.Списание ТОГДА -Д.Количество ИНАЧЕ Д.Количество КОНЕЦ),0) КАК Количество, ЕСТЬNULL(СУММА(ВЫБОР КОГДА Д.Списание ТОГДА -Д.Стоимость ИНАЧЕ Д.Стоимость КОНЕЦ),0) КАК Стоимость ИЗ РегистрСведений.ДвижениеФонда КАК Д ГДЕ Д.ДатаДвижения &lt; &amp;НачалоПериода
+ОБЪЕДИНИТЬ ВСЕ
+ВЫБРАТЬ ВЫБОР КОГДА Д.Списание ТОГДА "Списание" ИНАЧЕ "Поступление" КОНЕЦ, ВЫБОР КОГДА Д.Списание ТОГДА С.ССылка.Причина.Наименование ИНАЧЕ Д.Экземпляр.Источник.Наименование КОНЕЦ, СУММА(Д.Количество),СУММА(Д.Стоимость) ИЗ РегистрСведений.ДвижениеФонда КАК Д ЛЕВОЕ СОЕДИНЕНИЕ Документ.Списание.Строки КАК С ПО Д.Экземпляр=С.Экземпляр И С.Ссылка.Проведен ГДЕ Д.ДатаДвижения МЕЖДУ &amp;НачалоПериода И &amp;КонецПериода СГРУППИРОВАТЬ ПО Д.Списание,ВЫБОР КОГДА Д.Списание ТОГДА С.Ссылка.Причина.Наименование ИНАЧЕ Д.Экземпляр.Источник.Наименование КОНЕЦ
+ОБЪЕДИНИТЬ ВСЕ
+ВЫБРАТЬ "Конечный остаток", "Фонд", ЕСТЬNULL(СУММА(ВЫБОР КОГДА Д.Списание ТОГДА -Д.Количество ИНАЧЕ Д.Количество КОНЕЦ),0), ЕСТЬNULL(СУММА(ВЫБОР КОГДА Д.Списание ТОГДА -Д.Стоимость ИНАЧЕ Д.Стоимость КОНЕЦ),0) ИЗ РегистрСведений.ДвижениеФонда КАК Д ГДЕ Д.ДатаДвижения &lt;= &amp;КонецПериода</query>
+	</dataSet>
+	<parameter>
+		<name>НачалоПериода</name>
+		<valueType>
+			<v8:Type>xs:dateTime</v8:Type>
+			<v8:DateQualifiers>
+				<v8:DateFractions>DateTime</v8:DateFractions>
+			</v8:DateQualifiers>
+		</valueType>
+		<value xsi:type="xs:dateTime">0001-01-01T00:00:00</value>
+		<useRestriction>false</useRestriction>
+	</parameter>
+	<parameter>
+		<name>КонецПериода</name>
+		<valueType>
+			<v8:Type>xs:dateTime</v8:Type>
+			<v8:DateQualifiers>
+				<v8:DateFractions>DateTime</v8:DateFractions>
+			</v8:DateQualifiers>
+		</valueType>
+		<value xsi:type="xs:dateTime">0001-01-01T00:00:00</value>
+		<useRestriction>false</useRestriction>
+	</parameter>
+	<settingsVariant>
+		<dcsset:name>Основной</dcsset:name>
+		<dcsset:presentation xsi:type="v8:LocalStringType">
+			<v8:item>
+				<v8:lang>ru</v8:lang>
+				<v8:content>ДвижениеФонда</v8:content>
+			</v8:item>
+		</dcsset:presentation>
+		<dcsset:settings xmlns:pal="http://v8.1c.ru/8.1/data/ui/colors/palette" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows">
+			<dcsset:selection>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>Операция</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>Группа</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>Количество</dcsset:field>
+				</dcsset:item>
+				<dcsset:item xsi:type="dcsset:SelectedItemField">
+					<dcsset:field>Стоимость</dcsset:field>
+				</dcsset:item>
+			</dcsset:selection>
+			<dcsset:item xsi:type="dcsset:StructureItemGroup"/>
+		</dcsset:settings>
+	</settingsVariant>
+</DataCompositionSchema>

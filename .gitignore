@@ -15,3 +15,28 @@ Thumbs.db
 # Переменные окружения
 .env
 .env.*
+!.env.example
+
+# Зависимости и результаты сборки
+node_modules/
+dist/
+build/
+coverage/
+*.tsbuildinfo
+
+# Данные стенда и локальные выгрузки 1С
+onec/dist/*
+!onec/dist/README.md
+data/local/
+onec/work/
+tests/results/*
+!tests/results/README.md
+
+# MVP (src/)
+# Собранный интерфейс хранится в репозитории, чтобы запуск не требовал npm
+!src/web/dist/
+# Локальные пароли демо-учёток
+src/data/demo-accounts.json
+
+src/server/outbox/
+src/backup/

@@ -1,0 +1,16 @@
+{
+  "name": "biblius-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "esbuild src/main.jsx --bundle --minify --jsx=automatic --loader:.jsx=jsx --define:process.env.NODE_ENV=\\\"production\\\" --outfile=dist/app.js && node -e \"const f=require('fs');f.copyFileSync('index.html','dist/index.html');f.writeFileSync('dist/styles.css',f.readFileSync('src/styles.css','utf8')+'\\n'+f.readFileSync('src/site.css','utf8'))\""
+  },
+  "dependencies": {
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.2"
+  }
+}
