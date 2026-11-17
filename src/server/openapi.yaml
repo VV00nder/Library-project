@@ -8,7 +8,7 @@ info:
     Расчёты (статус экземпляра, просрочка, KPI) выполняются в 1С.
 
     **Авторизация.** `POST /api/auth/login` возвращает cookie `bsid` (HttpOnly, SameSite=Strict, срок 8 ч).
-    Роли: `librarian` — библиотекарь, `reader` — читатель. Бухгалтер работает в клиенте 1С.
+    Роли: `librarian` – библиотекарь, `reader` – читатель. Бухгалтер работает в клиенте 1С.
 
     **Ошибки.** Любая ошибка возвращается в формате `Error`: машинный код, текст для пользователя и
     `request_id` для поиска в журнале сервера.
@@ -16,7 +16,7 @@ info:
     **Постраничный вывод.** Списки книг, читателей, выдач, журнала операций и публичного каталога
     принимают `page` (с 1) и `per_page` (1–200, по умолчанию 50). Без `page` возвращается весь список.
 
-    **Даты** — `YYYY-MM-DD`, время — ISO 8601. Деньги — строка с двумя знаками после точки.
+    **Даты** – `YYYY-MM-DD`, время – ISO 8601. Деньги – строка с двумя знаками после точки.
 servers:
   - url: http://localhost:3001
     description: Стенд (сервер приложения)
@@ -162,7 +162,7 @@ components:
         date: { type: string, format: date }
         active_count: { type: integer }
         overdue_count: { type: integer }
-        overdue_percent: { type: number, nullable: true, description: 'Доля просроченных, %, 2 знака; null — нет активных выдач' }
+        overdue_percent: { type: number, nullable: true, description: 'Доля просроченных, %, 2 знака; null – нет активных выдач' }
         items: { type: array, items: { $ref: '#/components/schemas/Loan' } }
     OverdueStats:
       type: object
@@ -245,7 +245,7 @@ paths:
   /api/me/link/start:
     post:
       tags: [Учётная запись]
-      summary: Привязка билета, шаг 1 — отправить код на e-mail из карточки читателя
+      summary: Привязка билета, шаг 1 – отправить код на e-mail из карточки читателя
       description: Код из 6 цифр действует 10 минут. Без настроенного SMTP письмо сохраняется в папку server/outbox.
       requestBody: { required: true, content: { application/json: { schema: { type: object, required: [reader_id], properties: { reader_id: { type: string, example: R-0001 } } } } } }
       responses:
@@ -255,7 +255,7 @@ paths:
   /api/me/link/confirm:
     post:
       tags: [Учётная запись]
-      summary: Привязка билета, шаг 2 — подтвердить код
+      summary: Привязка билета, шаг 2 – подтвердить код
       description: Не более 5 попыток на один код.
       requestBody: { required: true, content: { application/json: { schema: { type: object, required: [code], properties: { code: { type: string, pattern: '^\d{6}$' } } } } } }
       responses:
@@ -268,7 +268,7 @@ paths:
       summary: Мои выдачи (читатель)
       parameters: [{ $ref: '#/components/parameters/Date' }]
       responses:
-        '200': { description: 'Выдачи читателя; без билета — пустой список и not_linked: true', content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { $ref: '#/components/schemas/Loan' } }, not_linked: { type: boolean } } } } } }
+        '200': { description: 'Выдачи читателя; без билета – пустой список и not_linked: true', content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { $ref: '#/components/schemas/Loan' } }, not_linked: { type: boolean } } } } } }
   /api/public/catalog:
     get:
       tags: [Публичный каталог]
@@ -361,7 +361,7 @@ paths:
   /api/requests:
     get:
       tags: [Заявки]
-      summary: Заявки «Взять почитать» (библиотекарь — все, читатель — свои)
+      summary: Заявки «Взять почитать» (библиотекарь – все, читатель – свои)
       parameters: [{ name: status, in: query, schema: { type: string, enum: [Новая, Выдана, Отклонена, Отменена] } }]
       responses: { '200': { description: Заявки, content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { $ref: '#/components/schemas/Request' } } } } } } } }
     post:
@@ -410,7 +410,7 @@ paths:
   /api/reports/overdue/stats:
     get:
       tags: [Отчёты]
-      summary: Статистика просрочек — средняя, медиана, ТОП-N (FR-19)
+      summary: Статистика просрочек – средняя, медиана, ТОП-N (FR-19)
       parameters:
         - { $ref: '#/components/parameters/Date' }
         - { $ref: '#/components/parameters/ReportFilters_from' }
